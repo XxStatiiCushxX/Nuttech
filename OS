@@ -1,0 +1,27 @@
+import subprocess
+
+def install_ai_on_android(device_id, ai_model_name):
+  """Installs AI on an Android device.
+
+  Args:
+    device_id: The ID of the Android device.
+    ai_model_name: The name of the AI model.
+  """
+
+  # Install the AI model on the device.
+  subprocess.run(["adb", "-s", device_id, "install", ai_model_name + ".zip"])
+
+  # Start the AI service.
+  subprocess.run(["adb", "-s", device_id, "shell", "am", "start", "-n", "com.example." + ai_model_name + "/" + "com.example." + ai_model_name + ".AIService"])
+
+def main():
+  """Installs AI on the first connected Android device."""
+
+  # Get the ID of the first connected Android device.
+  device_id = subprocess.check_output(["adb", "devices"]).decode("utf-8").split("\n")[1].split("\t")[0]
+
+  # Install AI on the device.
+  install_ai_on_android(device_id, "Nutt")
+
+if __name__ == "__main__":
+  main()
